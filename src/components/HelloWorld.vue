@@ -142,8 +142,8 @@ export default {
           nombre: 'caterpillar wheel 🐛',
           descripcion: 'Rueda con un sistema de resortes de un material flexible, resistente a la tracción, elongación a rotura, alta resistencia química, contracción térmica baja y alta resistencia al corte.',
           imagenes: [
-            {descrip: 'Sistema de amortiguacion',url:require("../assets/Herramientas/1rueda.jpg")},
-            {descrip: 'Sistema de agarre',url:require("../assets/Herramientas/2rueda.jpg")},
+            {descrip: 'Sistema de amortiguacion',url:require("../assets/Herramientas/1rueda.jpeg")},
+            {descrip: 'Modelo 3D',url:require("../assets/Herramientas/2rueda.jpg")},
             {descrip: 'Diseño completo',url:require("../assets/Herramientas/rueda3.jpg")}
           ]
         },
@@ -151,7 +151,7 @@ export default {
 
       listaHerramientas: [
         {
-          nombre: 'Multi herramienta 🔧',
+          nombre: 'Herramienta universal 🔧',
           descripcion: 'Mango con 2 encastres en ambos extremos que permite incrustar diferentes cabezales de herramientas y utensilios.',
           imagenes: [
             {descrip: 'Mango de frente',url:require("../assets/Herramientas/mango1.jpeg")},
