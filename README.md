@@ -1,7 +1,7 @@
 # proyectomarte
 
 ## pagina web creada a modo de presentacion
-https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat/details
+https://keen-unicorn-88a4d6.netlify.app/
 
 ## Project setup
 ```
