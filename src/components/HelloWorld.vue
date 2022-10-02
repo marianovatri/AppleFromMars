@@ -143,7 +143,8 @@ export default {
           descripcion: 'Rueda con un sistema de resortes de un material flexible, resistente a la tracción, elongación a rotura, alta resistencia química, contracción térmica baja y alta resistencia al corte.',
           imagenes: [
             {descrip: 'Sistema de amortiguacion',url:require("../assets/Herramientas/1rueda.jpg")},
-            {descrip: 'Sistema de agarre',url:require("../assets/Herramientas/2rueda.jpg")}
+            {descrip: 'Sistema de agarre',url:require("../assets/Herramientas/2rueda.jpg")},
+            {descrip: 'Diseño completo',url:require("../assets/Herramientas/rueda3.jpg")}
           ]
         },
       ],
