@@ -1,4 +1,4 @@
-# proyectomarte
+# AppleFromMars
 
 ## pagina web creada a modo de presentacion
 https://keen-unicorn-88a4d6.netlify.app/
