@@ -1,27 +1,22 @@
-# AppleFromMars
+# Apple From Mars
 
-## pagina web creada a modo de presentacion
-https://keen-unicorn-88a4d6.netlify.app/
+Proyecto para el NASA International Space Apps Challenge 2022: *Outfitting a Mars Habitat: A 3D Print Challenge*.
 
-## Project setup
-```
-npm install
-```
+Sitio: https://marsproyect.netlify.app/
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Sitio actual (`site/`)
 
-### Compiles and minifies for production
+Página estática, sin compilación: visor 3D de las piezas imprimibles (Three.js + STLLoader), láminas, planos en PDF y hora marciana en vivo.
+
+Para verlo en local hace falta un servidor (el visor carga los `.stl` por HTTP):
+
 ```
-npm run build
+cd site
+python -m http.server 8000
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+Netlify publica `site/` según `netlify.toml`.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Versión original (2022)
+
+La versión hecha durante la competencia sigue en `src/` (Vue 3). Los archivos fuente originales (STL, SketchUp y PDF) están en `AppleFromMars/`.

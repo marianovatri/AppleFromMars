@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Apple From Mars · Equipar un hábitat en Marte</title>
+<meta name="description" content="Proyecto para el NASA International Space Apps Challenge 2022: herramientas, muebles y una rueda de rover diseñados para imprimirse en 3D dentro de un hábitat en Marte.">
+<meta property="og:title" content="Apple From Mars · NASA Space Apps Challenge 2022">
+<meta property="og:description" content="Herramientas, muebles y una rueda de rover diseñados para imprimirse en 3D en Marte. Mirá y girá los modelos.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://marsproyect.netlify.app/img/og.png">
+<meta name="theme-color" content="#120b0a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='%23d9653b'/%3E%3Ccircle cx='24' cy='26' r='5' fill='%23a8441f'/%3E%3Ccircle cx='40' cy='40' r='7' fill='%23a8441f'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Sitio de una sola página: hero con Marte, el desafío, las soluciones, un visor 3D de las piezas imprimibles, láminas y planos. */
+:root{
+  --void:#120b0a;      /* fondo: noche marciana */
+  --dust:#1c1210;      /* superficies */
+  --sand:#f1e4d3;      /* texto */
+  --haze:#b09a88;      /* texto secundario */
+  --rust:#d9653b;      /* acento */
+  --ember:#ff8a4c;     /* acento brillante */
+  --paper:#f6efe6;     /* fondo de láminas técnicas */
+  --line:rgba(241,228,211,.13);
+  --f-display:"Space Grotesk",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --s-1:clamp(.76rem,.72rem + .15vw,.84rem);
+  --s0:clamp(1rem,.96rem + .2vw,1.08rem);
+  --s1:clamp(1.2rem,1.05rem + .6vw,1.5rem);
+  --s2:clamp(1.8rem,1.3rem + 2vw,3rem);
+  --s3:clamp(2.6rem,1.4rem + 4.6vw,5.6rem);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--void);color:var(--sand);font-family:var(--f-display);font-size:var(--s0);line-height:1.6;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ember);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.eyebrow{font-family:var(--f-mono);font-size:var(--s-1);letter-spacing:.16em;text-transform:uppercase;color:var(--ember);margin:0 0 18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:26px;height:1px;background:currentColor}
+h1,h2,h3{margin:0;line-height:1.02;letter-spacing:-.03em;font-weight:600;text-wrap:balance}
+h2{font-size:var(--s2);margin-bottom:18px}
+h3{font-size:var(--s1);letter-spacing:-.015em;font-weight:500}
+p{margin:0;max-width:62ch}
+.muted{color:var(--haze)}
+section{padding-block:clamp(72px,10vw,130px)}
+
+/* Encabezado */
+header{position:fixed;inset:0 0 auto;z-index:20;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+header.solid{background:rgba(18,11,10,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:700;letter-spacing:-.01em}
+.brand i{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--ember),var(--rust) 60%,#7a2c12);box-shadow:0 0 16px rgba(255,138,76,.6)}
+nav{display:flex;gap:24px}
+nav a{font-family:var(--f-mono);font-size:var(--s-1);text-transform:uppercase;letter-spacing:.08em;color:var(--haze);text-decoration:none}
+nav a:hover{color:var(--sand)}
+@media (max-width:720px){nav a:not(:last-child){display:none}}
+
+/* Hero */
+.hero{position:relative;min-height:100svh;display:grid;align-items:center;padding-block:110px 70px;overflow:hidden}
+#stars{position:absolute;inset:0;width:100%;height:100%}
+.planet{position:absolute;right:-12vw;top:50%;width:min(68vw,820px);aspect-ratio:1;translate:0 -50%;border-radius:50%;pointer-events:none;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 30% 28%,rgba(255,190,140,.5),transparent 34%),
+    radial-gradient(ellipse 34% 9% at 46% 58%,rgba(90,28,10,.42),transparent 70%),
+    radial-gradient(ellipse 22% 7% at 64% 42%,rgba(90,28,10,.3),transparent 70%),
+    radial-gradient(ellipse 90% 14% at 50% 74%,rgba(110,38,14,.35),transparent 70%),
+    radial-gradient(ellipse 60% 10% at 40% 22%,rgba(255,200,160,.18),transparent 70%),
+    radial-gradient(circle at 38% 36%,#e98a55,#c6532a 45%,#6e2410 78%,#2b0d06);
+  box-shadow:0 0 140px rgba(217,101,59,.3)}
+/* textura de superficie (ruido) que gira, y sombra fija del lado nocturno */
+.planet::before{content:"";position:absolute;inset:-10%;border-radius:50%;mix-blend-mode:multiply;opacity:.55;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .02' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .22 0 0 0 0 .1 0 0 0 1.6 -.45'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E") 0 0/100% 100%;
+  animation:spin 160s linear infinite}
+.planet::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset -70px -50px 130px rgba(0,0,0,.8),inset 14px 10px 40px rgba(255,190,140,.18)}
+@keyframes spin{to{background-position:0 0;rotate:360deg}}
+.hero .wrap{position:relative;z-index:1;width:100%}
+.hero h1{font-size:var(--s3);font-weight:600;max-width:12ch}
+.hero h1 em{font-style:normal;color:var(--ember)}
+.hero .lead{font-size:var(--s1);color:var(--sand);opacity:.86;line-height:1.45;margin-top:24px;max-width:38ch}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:34px;list-style:none;padding:0}
+.badges li{font-family:var(--f-mono);font-size:var(--s-1);padding:7px 13px;border-radius:999px;border:1px solid var(--line);background:rgba(28,18,16,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.badges li b{color:var(--ember);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font-weight:600;text-decoration:none;transition:transform .25s,background .25s,border-color .25s}
+.btn.solid{background:var(--rust);color:#1a0b06}
+.btn.solid:hover{background:var(--ember);transform:translateY(-2px)}
+.btn.ghost{border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--sand)}
+@media (max-width:820px){.planet{right:-40vw;top:24%;width:110vw;opacity:.55}}
+.planet{will-change:transform}
+/* polvo marciano que cruza el hero */
+#dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+/* parche de misión con texto que gira */
+.patch{position:absolute;right:clamp(16px,4vw,56px);bottom:clamp(90px,12vh,140px);width:clamp(96px,11vw,150px);z-index:1;font:500 11.5px var(--f-mono);letter-spacing:2.2px;fill:var(--sand)}
+.patch-ring{transform-origin:100px 100px;animation:spin 40s linear infinite}
+/* telemetría: hora marciana en vivo */
+.telemetry{position:absolute;left:0;right:0;bottom:0;z-index:1;display:flex;flex-wrap:wrap;gap:0;border-top:1px solid var(--line);background:rgba(18,11,10,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.telemetry div{flex:1 1 180px;padding:12px max(16px,4vw);border-right:1px solid var(--line);display:grid;gap:2px}
+.telemetry small{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
+.telemetry b{font-family:var(--f-mono);font-weight:500;font-size:var(--s0);color:var(--sand);font-variant-numeric:tabular-nums}
+.telemetry div:first-child b{color:var(--ember)}
+@media (max-width:820px){.patch{display:none}.telemetry div{flex-basis:50%;padding:10px 16px}.telemetry div:last-child{display:none}}
+.hero{padding-top:92px;padding-bottom:110px}
+/* barra de progreso de la "misión" */
+.progress{position:fixed;left:0;top:0;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--rust),var(--ember));z-index:30}
+/* títulos que se decodifican */
+.dec{font-variant-ligatures:none}
+/* botones magnéticos */
+.btn.solid{transition:transform .3s cubic-bezier(.2,.7,.1,1),background .25s}
+/* herramientas del visor */
+.tools{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;pointer-events:none}
+.tools>*{pointer-events:auto}
+.swatches{display:flex;gap:6px;padding:6px;border-radius:999px;background:rgba(18,11,10,.7)}
+.swatches button{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;background:var(--c)}
+.swatches button[aria-pressed="true"]{border-color:var(--sand);box-shadow:0 0 0 2px rgba(18,11,10,.9) inset}
+.tg{display:flex;gap:6px}
+.tg button{font:500 .72rem var(--f-mono);letter-spacing:.06em;color:var(--sand);background:rgba(18,11,10,.7);border:1px solid var(--line);border-radius:999px;padding:6px 11px;cursor:pointer}
+.tg button[aria-pressed="true"]{border-color:var(--ember);color:var(--ember)}
+/* esquinas de visor tipo cámara */
+.stage::before{content:"";position:absolute;inset:12px;pointer-events:none;z-index:1;opacity:.5;
+  background:
+    linear-gradient(var(--sand),var(--sand)) left top/18px 1px no-repeat,linear-gradient(var(--sand),var(--sand)) left top/1px 18px no-repeat,
+    linear-gradient(var(--sand),var(--sand)) right top/18px 1px no-repeat,linear-gradient(var(--sand),var(--sand)) right top/1px 18px no-repeat,
+    linear-gradient(var(--sand),var(--sand)) left bottom/18px 1px no-repeat,linear-gradient(var(--sand),var(--sand)) left bottom/1px 18px no-repeat,
+    linear-gradient(var(--sand),var(--sand)) right bottom/18px 1px no-repeat,linear-gradient(var(--sand),var(--sand)) right bottom/1px 18px no-repeat}
+.stage .hud,.stage .tools{z-index:2}
+.stage .hud{bottom:22px;left:24px;right:24px}
+.stage .tools{top:22px;left:24px;right:24px}
+/* tarjetas que se inclinan */
+.card{transform-style:preserve-3d;will-change:transform}
+.official{display:inline-flex;gap:8px;align-items:center;margin-top:22px;font-family:var(--f-mono);font-size:var(--s-1);color:var(--ember);text-decoration:none;border-bottom:1px solid rgba(255,138,76,.4);padding-bottom:2px}
+.official:hover{border-color:var(--ember)}
+
+/* Desafío */
+.challenge{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,70px);align-items:start}
+.challenge .big{font-size:var(--s1);line-height:1.5}
+.needs{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.needs li{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--dust)}
+.needs b{font-family:var(--f-mono);color:var(--ember);font-weight:500;font-size:var(--s-1);padding-top:3px}
+@media (max-width:820px){.challenge{grid-template-columns:1fr}}
+
+/* Soluciones */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:38px}
+.card{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--dust);transition:transform .35s cubic-bezier(.2,.7,.1,1),border-color .35s}
+.card:hover{transform:translateY(-4px);border-color:rgba(255,138,76,.45)}
+.card .pic{position:relative;background:var(--paper);aspect-ratio:4/3;overflow:hidden}
+.card .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:14px;transition:scale .5s cubic-bezier(.2,.7,.1,1)}
+.card:hover .pic img{scale:1.05}
+.card .txt{padding:20px 20px 22px;display:grid;gap:8px}
+.card .kind{font-family:var(--f-mono);font-size:var(--s-1);color:var(--ember);text-transform:uppercase;letter-spacing:.1em}
+.card p{color:var(--haze)}
+@media (max-width:900px){.cards{grid-template-columns:1fr}}
+
+/* Visor 3D */
+.viewer{display:grid;grid-template-columns:280px 1fr;gap:16px;margin-top:34px}
+.models{list-style:none;padding:0;margin:0;display:grid;gap:8px;align-content:start}
+.models button{width:100%;text-align:left;font:inherit;color:var(--sand);background:var(--dust);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;display:grid;gap:2px;transition:border-color .25s,background .25s}
+.models button small{font-family:var(--f-mono);font-size:.72rem;color:var(--haze)}
+.models button:hover{border-color:rgba(241,228,211,.35)}
+.models button[aria-pressed="true"]{border-color:var(--rust);background:linear-gradient(90deg,rgba(217,101,59,.18),rgba(217,101,59,.04))}
+.stage{position:relative;min-height:460px;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  background:radial-gradient(70% 70% at 50% 40%,#2a1914,#140d0b)}
+#model{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+#model:active{cursor:grabbing}
+.stage .hud{position:absolute;left:16px;right:16px;bottom:14px;display:flex;justify-content:space-between;align-items:end;gap:12px;pointer-events:none;flex-wrap:wrap}
+.stage .hud span{font-family:var(--f-mono);font-size:.74rem;color:var(--haze);background:rgba(18,11,10,.7);padding:5px 10px;border-radius:999px}
+.stage .hud a{pointer-events:auto;font-family:var(--f-mono);font-size:.78rem;text-decoration:none;color:#1a0b06;background:var(--sand);padding:8px 13px;border-radius:999px}
+.stage .hud a:hover{background:var(--ember)}
+.stage .loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-size:var(--s-1);color:var(--haze);pointer-events:none;transition:opacity .3s}
+.stage .loading[hidden]{display:grid!important;opacity:0}
+@media (max-width:820px){.viewer{grid-template-columns:1fr}.models{grid-auto-flow:column;grid-auto-columns:minmax(170px,1fr);overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}.models li{scroll-snap-align:start}.stage{min-height:360px}}
+
+/* Láminas */
+.gallery{columns:3 260px;column-gap:14px;margin-top:34px}
+.gallery button{display:block;width:100%;margin:0 0 14px;padding:0;border:0;border-radius:14px;overflow:hidden;background:var(--paper);cursor:zoom-in;break-inside:avoid;position:relative;font:inherit;text-align:left}
+.gallery img{width:100%;height:auto;transition:scale .5s cubic-bezier(.2,.7,.1,1)}
+.gallery button:hover img{scale:1.04}
+.gallery span{position:absolute;left:10px;bottom:10px;font-family:var(--f-mono);font-size:.72rem;color:var(--sand);background:rgba(18,11,10,.78);padding:4px 9px;border-radius:999px}
+dialog{border:0;padding:0;background:transparent;max-width:min(92vw,1000px);max-height:90vh}
+dialog::backdrop{background:rgba(8,5,4,.86);backdrop-filter:blur(4px)}
+dialog img{max-height:80vh;width:auto;margin:auto;border-radius:12px;background:var(--paper)}
+dialog p{text-align:center;color:var(--sand);font-family:var(--f-mono);font-size:var(--s-1);margin:12px auto 0}
+dialog button{position:fixed;top:16px;right:16px;font:600 1rem var(--f-mono);background:var(--sand);color:var(--void);border:0;border-radius:999px;width:42px;height:42px;cursor:pointer}
+
+/* Planos */
+.plans{list-style:none;padding:0;margin:30px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.plans a{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border:1px solid var(--line);border-radius:12px;text-decoration:none;background:var(--dust);transition:border-color .25s,transform .25s}
+.plans a:hover{border-color:var(--rust);transform:translateY(-2px)}
+.plans small{font-family:var(--f-mono);color:var(--haze);font-size:.72rem}
+
+/* Cierre */
+.closing{border-top:1px solid var(--line);text-align:center}
+.closing p{margin-inline:auto}
+footer{padding:26px 0 calc(26px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);font-family:var(--f-mono);font-size:var(--s-1);color:var(--haze)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+
+.rv{opacity:.2;transform:translateY(22px);transition:opacity .9s,transform .9s cubic-bezier(.2,.7,.1,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.planet{animation:none}.rv{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header id="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio"><i></i>Apple From Mars</a>
+    <nav aria-label="Secciones">
+      <a href="#desafio">Desafío</a>
+      <a href="#soluciones">Soluciones</a>
+      <a href="#laminas">Láminas</a>
+      <a href="#modelos">Modelos 3D</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <canvas id="stars" aria-hidden="true"></canvas>
+    <div class="planet" id="planet" aria-hidden="true"></div>
+    <svg class="patch" viewBox="0 0 200 200" aria-hidden="true">
+      <defs><path id="ring" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs>
+      <circle cx="100" cy="100" r="96" fill="rgba(18,11,10,.55)" stroke="rgba(241,228,211,.25)"/>
+      <circle cx="100" cy="100" r="62" fill="none" stroke="rgba(241,228,211,.18)"/>
+      <g class="patch-ring"><text><textPath href="#ring">APPLE FROM MARS · NASA SPACE APPS 2022 · OUTFITTING A MARS HABITAT · </textPath></text></g>
+      <circle cx="100" cy="100" r="30" fill="url(#pg)"/>
+      <radialGradient id="pg" cx=".35" cy=".35"><stop offset="0" stop-color="#ff9a5e"/><stop offset=".6" stop-color="#c6532a"/><stop offset="1" stop-color="#5a1c0a"/></radialGradient>
+      <path d="M100 52 l4 10 -8 0z M70 104 h-12 M142 104 h-12" stroke="#f1e4d3" stroke-width="2" fill="#f1e4d3" opacity=".6"/>
+    </svg>
+    <div class="telemetry" aria-label="Hora en Marte">
+      <div><small>Hora en Marte · MTC</small><b id="mtc">--:--:--</b></div>
+      <div><small>Sol marciano</small><b id="sol">-----</b></div>
+      <div><small>Demora de una señal</small><b>3–22 min</b></div>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow">NASA Space Apps Challenge 2022</p>
+      <h1>Equipar un hábitat en <em>Marte</em>.</h1>
+      <p class="lead">Llegás al Planeta Rojo con tres impresoras 3D (metal, plástico y concreto) y casi nada más. Diseñamos las herramientas, los muebles y una rueda nueva para el rover, listos para imprimir.</p>
+      <ul class="badges">
+        <li><b data-count="48">48</b> h de competencia</li>
+        <li><b data-count="7">7</b> piezas imprimibles</li>
+        <li><b data-count="6">6</b> planos técnicos</li>
+      </ul>
+      <div class="cta">
+        <a class="btn solid" href="#modelos">Girar los modelos 3D</a>
+        <a class="btn ghost" href="#desafio">Ver el desafío</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="desafio">
+    <div class="wrap challenge">
+      <div class="rv">
+        <p class="eyebrow">El desafío</p>
+        <h2>“Outfitting a Mars Habitat”</h2>
+        <p class="big">Imaginá que sos un astronauta recién llegado. El hábitat ya está construido, pero salvo tres impresoras 3D, no tiene casi nada de lo que necesitás para vivir y trabajar durante una misión de un año. Y para colmo, una rueda del rover está dañada.</p>
+        <a class="official" href="https://2022.spaceappschallenge.org/challenges/2022-challenges/mars-habitat" target="_blank" rel="noopener">Ver el desafío oficial de la NASA ↗</a>
+      </div>
+      <ol class="needs rv">
+        <li><b>01</b><div><h3>Herramientas</h3><p class="muted">Con poco material y poco espacio: cada pieza tiene que servir para más de una cosa.</p></div></li>
+        <li><b>02</b><div><h3>Vida diaria</h3><p class="muted">Utensilios, muebles y algo para no volverse loco en un año de aislamiento.</p></div></li>
+        <li><b>03</b><div><h3>Movilidad</h3><p class="muted">Reemplazar la rueda del rover con lo que se pueda imprimir en el hábitat.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="soluciones">
+    <div class="wrap">
+      <div class="rv">
+        <p class="eyebrow">Nuestra propuesta</p>
+        <h2>Tres soluciones, todo imprimible.</h2>
+      </div>
+      <div class="cards">
+        <article class="card rv">
+          <div class="pic"><img src="img/cabezales-herramientas.webp" width="668" height="443" loading="lazy" alt="Render de los cabezales intercambiables de herramientas"></div>
+          <div class="txt"><span class="kind">Herramientas</span><h3>Herramienta universal</h3>
+            <p>Un mango con encastres en ambos extremos donde se colocan distintos cabezales: herramientas de trabajo o cubiertos. Una sola pieza, muchos usos.</p></div>
+        </article>
+        <article class="card rv">
+          <div class="pic"><img src="img/rueda-completa.webp" width="475" height="460" loading="lazy" alt="Plano de la rueda tipo oruga con tres resortes internos"></div>
+          <div class="txt"><span class="kind">Rover</span><h3>Rueda tipo oruga</h3>
+            <p>Rueda con un sistema de resortes de material flexible: resistente a la tracción, al corte y a los químicos, y con baja contracción térmica.</p></div>
+        </article>
+        <article class="card rv">
+          <div class="pic"><img src="img/ping-pong.webp" width="656" height="546" loading="lazy" alt="Render de una paleta de ping pong impresa en 3D"></div>
+          <div class="txt"><span class="kind">Recreación</span><h3>Juegos para el hábitat</h3>
+            <p>Ping pong marciano y ta-te-ti espacial. El entretenimiento es fundamental para la salud mental en una misión larga.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelos">
+    <div class="wrap">
+      <div class="rv">
+        <p class="eyebrow">Modelos 3D</p>
+        <h2>Agarralos y giralos.</h2>
+        <p class="muted">Son los mismos archivos STL que mandaríamos a la impresora. Arrastrá para rotar, usá la rueda o pellizcá para acercar.</p>
+      </div>
+      <div class="viewer rv">
+        <ul class="models" id="models"></ul>
+        <div class="stage">
+          <canvas id="model" aria-label="Visor 3D del modelo seleccionado"></canvas>
+          <div class="tools">
+            <div class="swatches" role="group" aria-label="Color del filamento">
+              <button type="button" style="--c:#d9653b" data-c="#d9653b" aria-pressed="true" aria-label="Óxido marciano"></button>
+              <button type="button" style="--c:#e9e4dc" data-c="#e9e4dc" aria-pressed="false" aria-label="Blanco"></button>
+              <button type="button" style="--c:#8fb3c9" data-c="#8fb3c9" aria-pressed="false" aria-label="Metal"></button>
+              <button type="button" style="--c:#9a9187" data-c="#9a9187" aria-pressed="false" aria-label="Concreto"></button>
+            </div>
+            <div class="tg">
+              <button type="button" id="wire" aria-pressed="false">Malla</button>
+              <button type="button" id="spinBtn" aria-pressed="true">Giro</button>
+            </div>
+          </div>
+          <div class="loading" id="loading">Cargando modelo…</div>
+          <div class="hud"><span id="info">—</span><a id="download" href="#" download>Descargar STL ↓</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="laminas">
+    <div class="wrap">
+      <div class="rv">
+        <p class="eyebrow">Láminas</p>
+        <h2>El proceso, render por render.</h2>
+      </div>
+      <div class="gallery" id="gallery"></div>
+      <div class="rv" style="margin-top:56px">
+        <h3>Planos técnicos</h3>
+        <ul class="plans">
+          <li><a href="planos/rueda-completa.pdf" target="_blank" rel="noopener">Rueda completa <small>PDF ↗</small></a></li>
+          <li><a href="planos/eslabon-de-oruga.pdf" target="_blank" rel="noopener">Eslabón de oruga <small>PDF ↗</small></a></li>
+          <li><a href="planos/tapa-de-rueda.pdf" target="_blank" rel="noopener">Tapa de rueda <small>PDF ↗</small></a></li>
+          <li><a href="planos/mesa.pdf" target="_blank" rel="noopener">Mesa <small>PDF ↗</small></a></li>
+          <li><a href="planos/estanteria.pdf" target="_blank" rel="noopener">Estantería <small>PDF ↗</small></a></li>
+          <li><a href="planos/silla-banco.pdf" target="_blank" rel="noopener">Silla-banco <small>PDF ↗</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap rv">
+      <p class="eyebrow" style="justify-content:center">Apple From Mars</p>
+      <h2>Hecho en un fin de semana.</h2>
+      <p class="muted">Proyecto presentado en el NASA International Space Apps Challenge, 1 y 2 de octubre de 2022. Desarrollo web de Mariano Vatri.</p>
+      <div class="cta" style="justify-content:center"><a class="btn ghost" href="https://marianovatri.netlify.app/" target="_blank" rel="noopener">Conocé mi trabajo ↗</a></div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap"><span>Apple From Mars · 2022</span><span>NASA International Space Apps Challenge</span></div></footer>
+
+<dialog id="zoom"><button type="button" aria-label="Cerrar">✕</button><img alt=""><p></p></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // encabezado con fondo al scrollear
+  const head=document.getElementById('top');
+  const onScroll=()=>head.classList.toggle('solid',scrollY>40);
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  // aparición suave de bloques
+  const rv=[...document.querySelectorAll('.rv')];
+  if('IntersectionObserver' in window&&!still){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+    rv.forEach(el=>io.observe(el));
+  } else rv.forEach(el=>el.classList.add('in'));
+
+  // cielo estrellado del hero, con leve paralaje al mover el mouse
+  // + polvo marciano que cruza lento, como una tormenta lejana
+  const sc=document.getElementById('stars'),sx=sc.getContext('2d');let stars=[],dust=[],px=0,py=0,heroOn=true;
+  function seed(){const w=sc.clientWidth,h=sc.clientHeight,d=Math.min(devicePixelRatio,2);sc.width=w*d;sc.height=h*d;sx.setTransform(d,0,0,d,0,0);
+    stars=Array.from({length:Math.round(w*h/2600)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,z:Math.random(),t:Math.random()*6.28}));
+    dust=Array.from({length:Math.round(w/14)},()=>({x:Math.random()*w,y:h*(.35+Math.random()*.65),r:Math.random()*1.8+.4,v:.15+Math.random()*.55,a:.08+Math.random()*.3,t:Math.random()*6.28}))}
+  function sky(t){const w=sc.clientWidth,h=sc.clientHeight;sx.clearRect(0,0,w,h);
+    for(const s of stars){const a=.35+.65*Math.abs(Math.sin(t/1400+s.t));sx.globalAlpha=still?.8:a;sx.fillStyle=s.z>.9?'#ffcfae':'#f1e4d3';
+      sx.beginPath();sx.arc(s.x+px*s.z*18,s.y+py*s.z*18,s.r,0,6.283);sx.fill()}
+    sx.fillStyle='#e98a55';
+    for(const p of dust){if(!still){p.x+=p.v;p.y+=Math.sin(t/900+p.t)*.15;if(p.x>w+10)p.x=-10}
+      sx.globalAlpha=p.a;sx.beginPath();sx.arc(p.x+px*30,p.y+py*20,p.r,0,6.283);sx.fill()}
+    if(!still&&heroOn)requestAnimationFrame(sky)}
+  if('IntersectionObserver' in window)new IntersectionObserver(es=>{const was=heroOn;heroOn=es[0].isIntersecting;if(heroOn&&!was&&!still)requestAnimationFrame(sky)}).observe(sc);
+
+  // hora coordinada de Marte (MTC) y número de sol, en vivo
+  const mtcEl=document.getElementById('mtc'),solEl=document.getElementById('sol');
+  function marsTime(){
+    const jdTT=Date.now()/864e5+2440587.5+69.184/86400; // UTC + 37 s de segundos intercalares + 32,184 s
+    const msd=(jdTT-2451549.5)/1.0274912517+44796-.0009626;
+    let s=((msd%1)*86400)|0;const p=n=>String(n).padStart(2,'0');
+    mtcEl.textContent=`${p(s/3600|0)}:${p((s%3600)/60|0)}:${p(s%60)}`;
+    solEl.textContent=Math.floor(msd).toLocaleString('es-AR');
+  }
+  marsTime();setInterval(marsTime,1000);
+
+  // progreso de lectura y planeta que se aleja al bajar
+  const bar=document.getElementById('progress'),planet=document.getElementById('planet');
+  function scrolled(){const max=document.documentElement.scrollHeight-innerHeight,y=scrollY;
+    bar.style.transform=`scaleX(${max>0?y/max:0})`;
+    if(!still&&y<innerHeight*1.2)planet.style.transform=`translateY(${y*.35}px) scale(${1+y/innerHeight*.18})`}
+  addEventListener('scroll',scrolled,{passive:true});scrolled();
+
+  // números de las insignias que cuentan hacia arriba
+  document.querySelectorAll('[data-count]').forEach((el,i)=>{if(still)return;const n=+el.dataset.count,t0=performance.now()+300+i*150;
+    (function step(t){const p=Math.max(0,Math.min(1,(t-t0)/1100));el.textContent=Math.round(n*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)})(t0)});
+
+  // títulos que se "decodifican" al aparecer, como una transmisión
+  const GLYPHS='▚▞▖▗▘▝01<>/#*+';
+  function decode(el){const final=el.textContent;let f=0;const total=Math.min(26,final.length+8);
+    (function tick(){f++;el.textContent=[...final].map((c,i)=>c===' '||i<(f/total)*final.length?c:GLYPHS[(Math.random()*GLYPHS.length)|0]).join('');
+      if(f<total)setTimeout(tick,32);else el.textContent=final})()}
+  if(!still&&'IntersectionObserver' in window){const hs=document.querySelectorAll('section:not(.hero) h2');
+    const io2=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io2.unobserve(e.target);e.target.classList.add('dec');decode(e.target)}}),{threshold:.6});
+    hs.forEach(h=>{h.setAttribute('aria-label',h.textContent);io2.observe(h)})}
+
+  // botones magnéticos y tarjetas que se inclinan (solo con mouse)
+  if(!still&&matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelectorAll('.btn.solid').forEach(b=>{
+      b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.4}px)`});
+      b.addEventListener('pointerleave',()=>{b.style.transform=''})});
+    document.querySelectorAll('.card').forEach(c=>{
+      c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+        c.style.transform=`perspective(900px) rotateY(${x*8}deg) rotateX(${-y*6}deg) translateY(-4px)`});
+      c.addEventListener('pointerleave',()=>{c.style.transform=''})});
+  }
+  addEventListener('resize',seed);seed();requestAnimationFrame(sky);
+  addEventListener('pointermove',e=>{px=e.clientX/innerWidth-.5;py=e.clientY/innerHeight-.5},{passive:true});
+
+  // láminas con zoom
+  const SHOTS=[
+    ['mango-frente','Mango universal, de frente',510,406],['mango-dorso','Mango universal, del revés',499,427],
+    ['cabezales-herramientas','Cabezales de herramientas',668,443],['cabezales-utensilios','Cabezales de utensilios',768,550],
+    ['rueda-amortiguacion','Rueda: sistema de amortiguación',600,384],['rueda-modelo','Rueda: modelo 3D',535,554],
+    ['rueda-completa','Rueda: diseño completo',475,460],['ping-pong','Ping pong marciano',656,546],
+    ['red-ping-pong','Red de ping pong',716,546],['ta-te-ti','Ta-te-ti espacial',1090,546]];
+  const gal=document.getElementById('gallery'),dlg=document.getElementById('zoom');
+  SHOTS.forEach(([f,t,w,h])=>{const b=document.createElement('button');b.type='button';
+    b.innerHTML=`<img src="img/${f}.webp" width="${w}" height="${h}" loading="lazy" alt="${t}"><span>${t}</span>`;
+    b.addEventListener('click',()=>{dlg.querySelector('img').src=`img/${f}.webp`;dlg.querySelector('img').alt=t;dlg.querySelector('p').textContent=t;dlg.showModal()});
+    gal.appendChild(b)});
+  dlg.querySelector('button').addEventListener('click',()=>dlg.close());
+  dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+
+  // visor 3D de las piezas imprimibles
+  const MODELS=[
+    ['mango-universal','Mango universal','Herramientas'],['cabezales','Cabezales','Herramientas'],
+    ['cubiertos','Cubiertos','Vida diaria'],['plato','Plato','Vida diaria'],
+    ['paleta-ping-pong','Paleta de ping pong','Recreación'],['red-ping-pong','Red de ping pong','Recreación'],
+    ['ta-te-ti','Ta-te-ti','Recreación']];
+  const list=document.getElementById('models');
+  MODELS.forEach(([f,n,k],i)=>{const li=document.createElement('li');
+    li.innerHTML=`<button type="button" aria-pressed="${i===0}" data-i="${i}">${n}<small>${k}</small></button>`;list.appendChild(li)});
+
+  if(!window.THREE||!THREE.STLLoader){document.getElementById('loading').textContent='El visor 3D no está disponible en este navegador.';return}
+  const canvas=document.getElementById('model'),stage=canvas.parentElement;
+  let renderer;try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true})}catch(e){document.getElementById('loading').textContent='El visor 3D no está disponible en este navegador.';return}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(38,1,.1,100);camera.position.set(3.2,2.2,3.6);
+  scene.add(new THREE.HemisphereLight(0xffe2cc,0x2a120a,.9));
+  const key=new THREE.DirectionalLight(0xffffff,1.1);key.position.set(4,6,3);scene.add(key);
+  const rim=new THREE.DirectionalLight(0xff8a4c,.9);rim.position.set(-4,2,-4);scene.add(rim);
+  const grid=new THREE.GridHelper(6,24,0x6b3a28,0x3a2018);grid.position.y=-1.05;grid.material.transparent=true;grid.material.opacity=.55;scene.add(grid);
+  const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.dampingFactor=.08;controls.enablePan=false;
+  controls.minDistance=2;controls.maxDistance=9;controls.autoRotate=!still;controls.autoRotateSpeed=1.6;
+  controls.addEventListener('start',()=>{controls.autoRotate=false});
+  const mat=new THREE.MeshStandardMaterial({color:0xd9653b,roughness:.55,metalness:.08,flatShading:false});
+  const loader=new THREE.STLLoader(),cache={};let mesh=null,req=0;
+  const info=document.getElementById('info'),dl=document.getElementById('download'),loading=document.getElementById('loading');
+
+  function show(i){
+    const [f,n]=MODELS[i],my=++req;
+    list.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.i===i)));
+    dl.href=`modelos/${f}.stl`;dl.setAttribute('download',`${f}.stl`);loading.hidden=false;
+    const done=geo=>{if(my!==req)return;loading.hidden=true;
+      if(mesh)scene.remove(mesh);
+      mesh=new THREE.Mesh(geo,mat);
+      // los STL vienen con Z hacia arriba: se rota para que apoyen sobre la grilla
+      mesh.rotation.x=-Math.PI/2;scene.add(mesh);
+      const box=new THREE.Box3().setFromObject(mesh),size=box.getSize(new THREE.Vector3()),c=box.getCenter(new THREE.Vector3());
+      const s=2/Math.max(size.x,size.y,size.z);mesh.scale.setScalar(s);
+      const b2=new THREE.Box3().setFromObject(mesh),c2=b2.getCenter(new THREE.Vector3());
+      mesh.position.sub(c2);mesh.position.y+= -1.05-(b2.min.y-c2.y);
+      controls.target.set(0,(b2.max.y-b2.min.y)/2-1.05,0);
+      info.textContent=`${n} · ${geo.attributes.position.count/3|0} triángulos`;
+      mesh.scale.multiplyScalar(.001);pop=performance.now();popTarget=s};
+    if(cache[f])done(cache[f]);
+    else loader.load(`modelos/${f}.stl`,geo=>{geo.computeVertexNormals();cache[f]=geo;done(geo)},undefined,()=>{loading.textContent='No se pudo cargar el modelo.'});
+  }
+  let pop=0,popTarget=1;
+  list.addEventListener('click',e=>{const b=e.target.closest('button');if(b)show(+b.dataset.i)});
+
+  // color del filamento, vista de malla y giro automático
+  const sw=document.querySelector('.swatches');
+  sw.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    sw.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+    const c=new THREE.Color(b.dataset.c),from=mat.color.clone(),t0=performance.now();
+    (function fade(t){const p=Math.min(1,(t-t0)/350);mat.color.copy(from).lerp(c,p);mat.metalness=b.dataset.c==='#8fb3c9'?.6:.08;if(p<1)requestAnimationFrame(fade)})(t0)});
+  const wire=document.getElementById('wire'),spinBtn=document.getElementById('spinBtn');
+  wire.addEventListener('click',()=>{mat.wireframe=!mat.wireframe;wire.setAttribute('aria-pressed',String(mat.wireframe))});
+  spinBtn.setAttribute('aria-pressed',String(!still));
+  spinBtn.addEventListener('click',()=>{controls.autoRotate=!controls.autoRotate;spinBtn.setAttribute('aria-pressed',String(controls.autoRotate))});
+  controls.addEventListener('start',()=>spinBtn.setAttribute('aria-pressed','false'));
+
+  function size(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+  new ResizeObserver(size).observe(stage);size();
+
+  // se renderiza solo cuando el visor está a la vista
+  let visible=false;
+  new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible)requestAnimationFrame(loop)},{threshold:.05}).observe(stage);
+  function loop(t){
+    if(mesh&&pop){const p=Math.min(1,(t-pop)/550),e=1-Math.pow(1-p,3);mesh.scale.setScalar(popTarget*(still?1:Math.max(.001,e)));if(p>=1)pop=0}
+    controls.update();renderer.render(scene,camera);
+    if(visible)requestAnimationFrame(loop);
+  }
+  show(0);
+})();
+</script>
+</body>
+</html>

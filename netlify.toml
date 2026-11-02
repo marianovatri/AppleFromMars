@@ -1,0 +1,4 @@
+# El sitio rediseñado es estático: Netlify publica la carpeta site/ sin compilar.
+[build]
+  publish = "site"
+  command = ""
